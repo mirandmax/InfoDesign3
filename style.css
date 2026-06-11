@@ -1,3 +1,84 @@
+:root {
+/* Color definitions */
+  --ink:       #111111;
+  --ink-light: #555555;
+  --ink-muted: #888888;
+  --rule:      #d8d2c8;
+  --bg:        #faf9f7;
+  --cream:     #f3efe8;
+
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans:  'Source Sans 3', system-ui, sans-serif;
+
+  --max-w: 1100px;
+  --col-text: 420px;
+}
+
+html { font-size: 18px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.masthead {
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 56px 24px 48px;
+  text-align: center;
+  background: var(--bg);
+}
+
+.masthead-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.kicker {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 16px;
+}
+
+.headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.deck {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-light);
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.byline-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  border-top: 1px solid var(--rule);
+  padding-top: 16px;
+}
+
 .bubbles {
     stroke-width: 1px;
     stroke: black;
@@ -5,4 +86,68 @@
 }
 .bubbles:hover {
     stroke: black;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--rule);
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+
+.visualization-section {
+  padding: 64px 24px;
+}
+
+.visualization-section:nth-child(odd) {
+  background: var(--bg);
+}
+
+.visualization-section:nth-child(even) {
+  background: var(--cream);
+}
+
+.visualization-section {
+    display: flex;
+    justify-content: center;
+}
+
+.section-text--centered {
+  text-align: center;
+}
+
+#line-chart-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, max-content); 
+  gap: 10px;
+  
+  justify-content: center; 
+  
+  align-items: center; 
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 16px;
+  /* Ruled top line — NYT chapter device */
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+
+.section-body--narrow {
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
 }

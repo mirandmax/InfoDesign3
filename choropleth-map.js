@@ -1,4 +1,4 @@
-function drawChoroplethMap(data) {
+function drawChoroplethMap(ChoroData) {
   const el = document.getElementById("choropleth-map");
   if (!el) return;
 
@@ -18,19 +18,19 @@ function drawChoroplethMap(data) {
   const path = d3.geoPath();
   const projection = d3
     .geoMercator()
-    .scale(70)
+    .scale(100)
     .center([0, 20])
     .translate([width / 2, height / 2]);
 
   // Data and color scale
   const colorScale = d3
     .scaleThreshold()
-    .domain([0.35, 0.4, 0.45, 0.5, 0.55])
+    .domain([0.2, 0.3, 0.4, 0.5, 0.6])
     .range(d3.schemeReds[7]);
   // Load external data and boot
   Promise.all([
     d3.json(
-      "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson",
+      "data/choropleth-mapdata/world.geojson",
     ),
   ]).then(function (loadData) {
     let topo = loadData[0];
@@ -45,7 +45,7 @@ function drawChoroplethMap(data) {
       .attr("d", d3.geoPath().projection(projection))
       // set the color of each country
       .attr("fill", function (d) {
-        d.total = ChoroData.get(d.id) || 0;
+        d.total = ChoroData.filter((v) => v.country === d.properties.name)[0]?.gini || 0;
         return colorScale(d.total);
       });
   });
