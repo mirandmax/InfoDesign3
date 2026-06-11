@@ -4,7 +4,7 @@ var margin = {top: 30, right: 0, bottom: 30, left: 50},
     height = 210 - margin.top - margin.bottom;
 
 //Read the data
-d3.csv('C:/Users/diego/Documents/UNI/Grundlagen der Visualisierung/InfoDesign3/data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( function(data) {
+d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( function(data) {
 
     // TODO: decide which countries to keep
     const keepCountry = ['Austria', 'Germany', 'Italy'] 
