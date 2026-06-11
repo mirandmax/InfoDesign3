@@ -18,7 +18,7 @@ function drawChoroplethMap(ChoroData) {
   const path = d3.geoPath();
   const projection = d3
     .geoMercator()
-    .scale(70)
+    .scale(100)
     .center([0, 20])
     .translate([width / 2, height / 2]);
 
