@@ -6,3 +6,15 @@
 .bubbles:hover {
     stroke: black;
 }
+
+#line-chart-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, max-content); 
+  gap: 10px;
+  
+  /* Zentriert die gesamte Grid-Matrix horizontal im Container */
+  justify-content: center; 
+  
+  /* Zentriert die Diagramme innerhalb ihrer Grid-Zellen vertikal */
+  align-items: center; 
+}
