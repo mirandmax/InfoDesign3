@@ -38,3 +38,54 @@ body {
   max-width: var(--max-w);
   margin: 0 auto;
 }
+
+
+.visualization-section {
+  padding: 64px 24px;
+}
+
+.visualization-section:nth-child(odd) {
+  background: var(--bg);
+}
+
+.visualization-section:nth-child(even) {
+  background: var(--cream);
+}
+
+.visualization-section {
+    display: flex;
+    justify-content: center;
+}
+
+.section-text--centered {
+  text-align: center;
+}
+
+#line-chart-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, max-content); 
+  gap: 10px;
+  
+  justify-content: center; 
+  
+  align-items: center; 
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 16px;
+  /* Ruled top line — NYT chapter device */
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+}
+
+.section-body {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
