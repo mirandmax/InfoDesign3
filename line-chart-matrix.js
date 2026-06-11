@@ -7,7 +7,7 @@ var margin = {top: 30, right: 0, bottom: 30, left: 50},
 d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( function(data) {
 
     // TODO: decide which countries to keep
-    const keepCountry = ['Austria', 'Germany', 'Italy'] 
+    const keepCountry = ['Austria', 'Germany', 'Italy', 'Australia', 'United States', 'China', 'India', 'Brazil', 'South Africa'] 
 
     // Keep only some rows 
     const filteredData = data.filter(function(d) {

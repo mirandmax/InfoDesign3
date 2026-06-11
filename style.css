@@ -1,3 +1,28 @@
+:root {
+/* Color definitions */
+  --ink:       #111111;
+  --ink-light: #555555;
+  --ink-muted: #888888;
+  --rule:      #d8d2c8;
+  --bg:        #faf9f7;
+  --cream:     #f3efe8;
+
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans:  'Source Sans 3', system-ui, sans-serif;
+
+  --max-w: 1100px;
+  --col-text: 420px;
+}
+
+html { font-size: 18px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
 .bubbles {
     stroke-width: 1px;
     stroke: black;
@@ -5,4 +30,11 @@
 }
 .bubbles:hover {
     stroke: black;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--rule);
+  max-width: var(--max-w);
+  margin: 0 auto;
 }
