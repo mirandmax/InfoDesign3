@@ -89,3 +89,9 @@ body {
   line-height: 1.75;
   margin-bottom: 14px;
 }
+
+.section-body--narrow {
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
