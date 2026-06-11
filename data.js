@@ -6,6 +6,7 @@ async function loadCSV(path) {
     gini:      d['Gini coefficient']  !== '' ? +d['Gini coefficient']  : null,
     taxPct:    d['Tax revenues (% of GDP)']   !== '' ? +d['Tax revenues (% of GDP)']   : null,
     continent: d['World region according to OWID'],
+    population: d['Population'] !== '' ? +d['Population'] : null
   }));
 
   const clean = raw.filter(d => d.year && d.country);
