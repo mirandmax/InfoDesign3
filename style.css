@@ -12,6 +12,10 @@
 
   --max-w: 1100px;
   --col-text: 420px;
+
+  --bubble-svg-w: 900px;
+  --bubble-axis-w: 700px;
+  --bubble-left-margin: 50px;
 }
 
 html { font-size: 18px; scroll-behavior: smooth; }
@@ -150,4 +154,41 @@ body {
   max-width: 620px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.tooltip {
+  position: absolute;
+  background: var(--cream);
+  color: var(--ink);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  pointer-events: none; 
+  opacity: 0; 
+  transition: opacity 0.2s ease-in-out; 
+}
+
+.year-slider {
+  width: 900px;
+  margin-top: 20px;
+  appearance: none;
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+#section2 {
+  flex-direction: column;
+  align-items: center;
+}
+
+#bubble-plot {
+  width: var(--bubble-svg-w);
+}
+
+#section2 .year-slider {
+  width: var(--bubble-axis-w);
+  margin-top: 12px;
 }
