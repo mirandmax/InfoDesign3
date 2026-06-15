@@ -11,10 +11,22 @@ const svg = d3.select("#bubble-plot")
   .append("g")
   .attr("transform", `translate(${marginBubble.left},${marginBubble.top})`);
 
-//Read the data
-//d3.csv("data/tax-revenues-vs-income-inequality/tax-revenues-vs-income-inequality.csv").then(function (data) {
 function drawBubblePlot(data) {
-  const cleanData = data.filter(d => d.gini !== null && d.taxPct !== null && d.population !== null && d.gdpPerCapita !== null);
+  // Configuration constants
+  const LEGEND_X_OFFSET = 0.85;
+  const LEGEND_LABEL_OFFSET = 0.8;
+  const BUBBLE_OPACITY_ACTIVE = 0.8;
+  const BUBBLE_OPACITY_INACTIVE = 0.05;
+  const LEGEND_SIZE = 20;
+  const TRANSITION_DURATION = 300;
+
+  // bubble opacity based on selection state
+  const calculateBubbleOpacity = (d, activeContinents) => 
+    activeContinents.size === 0 || activeContinents.has(d.continent) 
+      ? BUBBLE_OPACITY_ACTIVE 
+      : BUBBLE_OPACITY_INACTIVE;
+
+  const cleanData = data.filter(d => d.gini !== null && d.taxPct !== null && d.gdpPerCapita !== null);
   const years = cleanData.map(d => +d.year);
   const minYear = d3.min(years);
   const maxYear = d3.max(years);
@@ -59,21 +71,19 @@ function drawBubblePlot(data) {
   const z = d3.scaleLinear().range([2, 35]);
 
   // Add a scale for bubble color
-  var myColor = d3.scaleOrdinal()
+  const myColor = d3.scaleOrdinal()
     .domain(["Asia", "Europe", "North America", "South America", "Africa", "Oceania"])
     .range(d3.schemeCategory10);
 
-
   //Tooltip
-
-  // Create a tooltip div that is hidden by default:
-  const tooltip = d3.select("body")
+  //tooltip div, hidden by default
+  const tooltip = d3.select("#bubble-plot")
     .append("div")
     .style("position", "absolute")
     .style("opacity", 0)
+    .style("pointer-events", "none")
     .attr("class", "tooltip");
 
-  //Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   const showTooltip = function (event, d) {
     tooltip
       .transition()
@@ -112,10 +122,9 @@ function drawBubblePlot(data) {
 
   const updateHighlightState = function () {
     const activeContinents = getActiveContinents();
-    const bubbleOpacity = d => activeContinents.size === 0 || activeContinents.has(d.continent) ? 0.8 : 0.05;
 
     d3.selectAll(".bubbles")
-      .style("opacity", bubbleOpacity);
+      .style("opacity", d => calculateBubbleOpacity(d, activeContinents));
 
     if (legendDots && legendLabels) {
       legendDots.classed("is-active", d => selectedContinents.has(d));
@@ -163,7 +172,7 @@ function drawBubblePlot(data) {
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
       .style("fill", d => myColor(d.continent))
-      .style("opacity", d => getActiveContinents().size === 0 || getActiveContinents().has(d.continent) ? 0.8 : 0.05)
+      .style("opacity", d => calculateBubbleOpacity(d, getActiveContinents()))
       .on("mouseover", showTooltip)
       .on("mousemove", moveTooltip)
       .on("mouseleave", hideTooltip);
@@ -172,8 +181,8 @@ function drawBubblePlot(data) {
 
     bubblesUpdate
       .transition()
-      .duration(300)
-      .style("opacity", d => getActiveContinents().size === 0 || getActiveContinents().has(d.continent) ? 0.8 : 0.05)
+      .duration(TRANSITION_DURATION)
+      .style("opacity", d => calculateBubbleOpacity(d, getActiveContinents()))
       .attr("cx", d => x(d.gini))
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
@@ -228,14 +237,13 @@ function drawBubblePlot(data) {
   //legend
 
   // Add one dot in the legend for each name.
-  const size = 20
   const allgroups = ["Asia", "Europe", "North America", "South America", "Africa", "Oceania"]
   legendDots = svg.selectAll(".legend-dot")
     .data(allgroups)
     .join("circle")
     .attr("class", "legend-dot")
-    .attr("cx", widthBubble * 0.85)
-    .attr("cy", (d, i) => 10 + i * (size + 5))
+    .attr("cx", widthBubble * LEGEND_X_OFFSET)
+    .attr("cy", (d, i) => 10 + i * (LEGEND_SIZE + 5))
     .attr("r", 7)
     .style("fill", d => myColor(d))
     .on("mouseover", highlight)
@@ -247,8 +255,8 @@ function drawBubblePlot(data) {
     .data(allgroups)
     .join("text")
     .attr("class", "legend-label")
-    .attr("x", widthBubble * 0.85 + size * .8)
-    .attr("y", (d, i) => i * (size + 5) + (size / 2))
+    .attr("x", widthBubble * LEGEND_X_OFFSET + LEGEND_SIZE * LEGEND_LABEL_OFFSET)
+    .attr("y", (d, i) => i * (LEGEND_SIZE + 5) + (LEGEND_SIZE / 2))
     .style("fill", d => myColor(d))
     .text(d => d)
     .attr("text-anchor", "left")
