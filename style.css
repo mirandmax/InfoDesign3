@@ -192,3 +192,70 @@ body {
   width: var(--bubble-axis-w);
   margin-top: 12px;
 }
+
+.slider-wrapper {
+  position: relative;
+  width: var(--bubble-axis-w);
+  margin: 40px auto 0;
+}
+
+.slider-track-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.slider-bound {
+  min-width: 42px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.slider-bound--min {
+  text-align: left;
+}
+
+.slider-bound--max {
+  text-align: right;
+}
+
+.slider-track-row input[type="range"] {
+  width: 100%;
+}
+
+.slider-tooltip {
+  position: absolute;
+  top: -30px; /* Platziert das Label über dem Slider */
+  left: 0;    /* Wird per JS dynamisch überschrieben */
+  transform: translateX(-50%); /* Zentriert das Label über dem Berechnungs-Punkt */
+  background-color: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  font-size: 12px;
+  pointer-events: none; /* Verhindert, dass das Label Mausklicks blockiert */
+  white-space: nowrap;
+}
+
+/* Optional: Ein kleiner Pfeil nach unten */
+.slider-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 4px 0;
+  border-style: solid;
+  border-color: #333 transparent;
+  display: block;
+  width: 0;
+}
+
+.x-axis-label, .y-axis-label {
+  font-size: 18px;
+  font-family: var(--font-sans);
+  fill: var(--ink);
+}

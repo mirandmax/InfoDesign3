@@ -19,13 +19,17 @@ function drawBubblePlot(data) {
   const minYear = d3.min(years);
   const maxYear = d3.max(years);
   const slider = d3.select("#year-slider");
+  const sliderTooltip = d3.select("#slider-tooltip");
+  const sliderMinYear = d3.select("#slider-min-year");
+  const sliderMaxYear = d3.select("#slider-max-year");
   const initialYear = Math.max(minYear, Math.min(maxYear, +slider.property("value") || maxYear));
-
 
   slider
     .attr("min", minYear)
     .attr("max", maxYear)
     .property("value", initialYear);
+  sliderMinYear.text(minYear);
+  sliderMaxYear.text(maxYear);
 
   const chartLayer = svg.append("g").attr("class", "bubble-chart");
   const xAxis = chartLayer.append("g")
@@ -57,7 +61,7 @@ function drawBubblePlot(data) {
   // Add a scale for bubble color
   var myColor = d3.scaleOrdinal()
     .domain(["Asia", "Europe", "North America", "South America", "Africa", "Oceania"])
-    .range(d3.schemeSet1);
+    .range(d3.schemeCategory10);
 
 
   //Tooltip
@@ -71,7 +75,6 @@ function drawBubblePlot(data) {
 
   //Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   const showTooltip = function (event, d) {
-    console.log(event, d);
     tooltip
       .transition()
       .duration(200)
@@ -101,7 +104,7 @@ function drawBubblePlot(data) {
 
   // And when it is not hovered anymore
   const noHighlight = function (event, d) {
-    d3.selectAll(".bubbles").style("opacity", 1)
+    d3.selectAll(".bubbles").style("opacity", 0.8)
   }
 
   function update(selectedYear) {
@@ -123,7 +126,7 @@ function drawBubblePlot(data) {
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
       .style("fill", d => myColor(d.continent))
-      .style("opacity", 1)
+      .style("opacity", 0.8)
       .on("mouseover", showTooltip)
       .on("mousemove", moveTooltip)
       .on("mouseleave", hideTooltip);
@@ -131,20 +134,40 @@ function drawBubblePlot(data) {
     const bubblesUpdate = bubblesEnter.merge(bubbles);
 
     bubblesUpdate
-    .transition()
-    .duration(300)
-    .style("opacity", 1)
+      .transition()
+      .duration(300)
+      .style("opacity", 0.8)
       .attr("cx", d => x(d.gini))
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
       .style("fill", d => myColor(d.continent));
   }
 
+  function updateTooltipPosition() {
+    const min = +slider.property("min");
+    const max = +slider.property("max");
+    const current = +slider.property("value");
+
+    sliderTooltip.text(current);
+
+    const percentage = (current - min) / (max - min);
+    const thumbWidth = 16;
+    const sliderNode = slider.node();
+    const wrapperNode = sliderTooltip.node().parentElement;
+    const sliderRect = sliderNode.getBoundingClientRect();
+    const wrapperRect = wrapperNode.getBoundingClientRect();
+    const sliderOffsetLeft = sliderRect.left - wrapperRect.left;
+    const leftPosition = sliderOffsetLeft + percentage * (sliderRect.width - thumbWidth) + (thumbWidth / 2);
+
+    sliderTooltip.style("left", `${leftPosition}px`);
+  }
+
   slider.on("input", function () {
+    updateTooltipPosition();
     update(+this.value);
   });
 
-
+// initial domains for scales
   const xmin = d3.min(cleanData, d => d.gini);
   const xmax = d3.max(cleanData, d => d.gini);
   const ymax = d3.max(cleanData, d => d.taxPct);
@@ -158,6 +181,7 @@ function drawBubblePlot(data) {
   xAxis.transition().duration(500).call(d3.axisBottom(x));
   yAxis.transition().duration(500).call(d3.axisLeft(y));
 
+  updateTooltipPosition();
   update(initialYear);
 
 
