@@ -293,6 +293,26 @@ body {
   fill: var(--ink-light);
 }
 
+.x-axis .tick text,
+.y-axis .tick text {
+  font-size: 14px;
+}
+
+.legend-dot,
+.legend-label {
+  cursor: pointer;
+}
+
+.legend-dot.is-active {
+  stroke: var(--ink);
+  stroke-width: 2px;
+}
+
+.legend-label.is-active {
+  font-weight: 700;
+  fill: var(--ink);
+}
+
 @media (max-width: 1120px) {
   #section2 {
     grid-template-columns: 1fr;

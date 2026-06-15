@@ -95,16 +95,53 @@ function drawBubblePlot(data) {
   }
 
   //Highlight a group
+  let selectedContinents = new Set();
+  let hoveredContinent = null;
+  let legendDots = null;
+  let legendLabels = null;
+
+  const getActiveContinents = function () {
+    const activeContinents = new Set(selectedContinents);
+
+    if (hoveredContinent) {
+      activeContinents.add(hoveredContinent);
+    }
+
+    return activeContinents;
+  };
+
+  const updateHighlightState = function () {
+    const activeContinents = getActiveContinents();
+    const bubbleOpacity = d => activeContinents.size === 0 || activeContinents.has(d.continent) ? 0.8 : 0.05;
+
+    d3.selectAll(".bubbles")
+      .style("opacity", bubbleOpacity);
+
+    if (legendDots && legendLabels) {
+      legendDots.classed("is-active", d => selectedContinents.has(d));
+      legendLabels.classed("is-active", d => selectedContinents.has(d));
+    }
+  };
+
   const highlight = function (event, d) {
-    // reduce opacity of all groups
-    d3.selectAll(".bubbles").style("opacity", .05)
-    // expect the one that is hovered
-    d3.selectAll("." + d.replace(/\s/g, '')).style("opacity", 1)
+    hoveredContinent = d;
+    updateHighlightState();
   }
 
-  // And when it is not hovered anymore
   const noHighlight = function (event, d) {
-    d3.selectAll(".bubbles").style("opacity", 0.8)
+    if (hoveredContinent === d) {
+      hoveredContinent = null;
+    }
+    updateHighlightState();
+  }
+
+  const toggleSelection = function (event, d) {
+    if (selectedContinents.has(d)) {
+      selectedContinents.delete(d);
+    } else {
+      selectedContinents.add(d);
+    }
+    updateHighlightState();
   }
 
   function update(selectedYear) {
@@ -126,7 +163,7 @@ function drawBubblePlot(data) {
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
       .style("fill", d => myColor(d.continent))
-      .style("opacity", 0.8)
+      .style("opacity", d => getActiveContinents().size === 0 || getActiveContinents().has(d.continent) ? 0.8 : 0.05)
       .on("mouseover", showTooltip)
       .on("mousemove", moveTooltip)
       .on("mouseleave", hideTooltip);
@@ -136,11 +173,13 @@ function drawBubblePlot(data) {
     bubblesUpdate
       .transition()
       .duration(300)
-      .style("opacity", 0.8)
+      .style("opacity", d => getActiveContinents().size === 0 || getActiveContinents().has(d.continent) ? 0.8 : 0.05)
       .attr("cx", d => x(d.gini))
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
       .style("fill", d => myColor(d.continent));
+
+    updateHighlightState();
   }
 
   function updateTooltipPosition() {
@@ -165,6 +204,7 @@ function drawBubblePlot(data) {
   slider.on("input", function () {
     updateTooltipPosition();
     update(+this.value);
+    updateHighlightState();
   });
 
 // initial domains for scales
@@ -190,21 +230,23 @@ function drawBubblePlot(data) {
   // Add one dot in the legend for each name.
   const size = 20
   const allgroups = ["Asia", "Europe", "North America", "South America", "Africa", "Oceania"]
-  svg.selectAll("myrect")
+  legendDots = svg.selectAll(".legend-dot")
     .data(allgroups)
     .join("circle")
+    .attr("class", "legend-dot")
     .attr("cx", widthBubble * 0.85)
     .attr("cy", (d, i) => 10 + i * (size + 5))
     .attr("r", 7)
     .style("fill", d => myColor(d))
     .on("mouseover", highlight)
     .on("mouseleave", noHighlight)
+    .on("click", toggleSelection)
 
   // Add labels beside legend dots
-  svg.selectAll("mylabels")
+  legendLabels = svg.selectAll(".legend-label")
     .data(allgroups)
-    .enter()
-    .append("text")
+    .join("text")
+    .attr("class", "legend-label")
     .attr("x", widthBubble * 0.85 + size * .8)
     .attr("y", (d, i) => i * (size + 5) + (size / 2))
     .style("fill", d => myColor(d))
@@ -213,5 +255,8 @@ function drawBubblePlot(data) {
     .style("alignment-baseline", "middle")
     .on("mouseover", highlight)
     .on("mouseleave", noHighlight)
+    .on("click", toggleSelection)
+
+  updateHighlightState();
 
 }
