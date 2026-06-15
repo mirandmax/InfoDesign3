@@ -180,12 +180,21 @@ body {
 }
 
 #section2 {
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, var(--bubble-svg-w)) minmax(280px, 1fr);
+  grid-template-areas:
+    "plot copy"
+    "slider copy"
+    "note note";
+  column-gap: 36px;
+  justify-content: center;
+  align-items: start;
 }
 
 #bubble-plot {
+  grid-area: plot;
   width: var(--bubble-svg-w);
+  justify-self: start;
 }
 
 #section2 .year-slider {
@@ -194,9 +203,11 @@ body {
 }
 
 .slider-wrapper {
+  grid-area: slider;
   position: relative;
   width: var(--bubble-axis-w);
-  margin: 40px auto 0;
+  margin: 12px 0 0 50px;
+  justify-self: start;
 }
 
 .slider-track-row {
@@ -225,9 +236,43 @@ body {
   width: 100%;
 }
 
+.bubble-plot-copy {
+  grid-area: copy;
+  max-width: 420px;
+  padding-top: 12px;
+  margin-left: 12px;
+}
+
+.bubble-plot-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.bubble-plot-text,
+.bubble-plot-note {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  line-height: 1.75;
+}
+
+.bubble-plot-text {
+  margin: 0 0 12px;
+}
+
+.bubble-plot-note {
+  grid-area: note;
+  width: 100%;
+  margin-top: 10px;
+  margin-left: 0;
+}
+
 .slider-tooltip {
   position: absolute;
-  top: -30px; /* Platziert das Label über dem Slider */
+  top: -20px; /* Platziert das Label über dem Slider */
   left: 0;    /* Wird per JS dynamisch überschrieben */
   transform: translateX(-50%); /* Zentriert das Label über dem Berechnungs-Punkt */
   background-color: #333;
@@ -240,22 +285,28 @@ body {
   white-space: nowrap;
 }
 
-/* Optional: Ein kleiner Pfeil nach unten */
-.slider-tooltip::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 4px 4px 0;
-  border-style: solid;
-  border-color: #333 transparent;
-  display: block;
-  width: 0;
-}
+
 
 .x-axis-label, .y-axis-label {
-  font-size: 18px;
+  font-size: 16px;
   font-family: var(--font-sans);
-  fill: var(--ink);
+  fill: var(--ink-light);
+}
+
+@media (max-width: 1120px) {
+  #section2 {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "plot"
+      "slider"
+      "copy"
+      "note";
+  }
+
+  #bubble-plot,
+  .slider-wrapper,
+  .bubble-plot-note,
+  .bubble-plot-copy {
+    max-width: 100%;
+  }
 }
