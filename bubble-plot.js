@@ -90,7 +90,7 @@ function drawBubblePlot(data) {
       .duration(200)
     tooltip
       .style("opacity", 1)
-      .html(d.country)
+      .html(`<strong>${d.country}</strong><br/>GDP per capita: $${(+d.gdpPerCapita).toLocaleString()}`)
       .style("left", (event.pageX + 10) + "px")
       .style("top", (event.pageY + 10) + "px")
   }
