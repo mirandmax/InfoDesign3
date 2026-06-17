@@ -55,6 +55,19 @@ d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( funct
     //.domain(allKeys)
     .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
 
+    // Create tooltip
+    const tooltip = d3.select("body").append("div")
+        .style("position", "absolute")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "8px")
+        .style("font-size", "12px")
+        .style("pointer-events", "none")
+        .style("opacity", 0)
+        .style("z-index", 1000);
+
     // Draw the line
     svg
     .append("path")
@@ -67,6 +80,48 @@ d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( funct
             .y(function(d) { return y(+d['GDP per capita']); })
             (d[1])
         })
+
+    // Add circles for hover interaction
+    svg
+    .selectAll("dot")
+    .data(function(d) { return d[1]; })
+    .enter()
+    .append("circle")
+        .attr("cx", function(d) { return x(d.Year); })
+        .attr("cy", function(d) { return y(+d['GDP per capita']); })
+        .attr("r", 1)
+        .attr("fill", function(d) { return color(d.Entity); })
+        .attr("stroke", function(d) { return "black"; })
+        .attr("stroke-width", 1)
+        .style("opacity", 0)
+        .on("mouseover", function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+                .attr("r", 3);
+            
+            tooltip
+                .style("opacity", 1)
+                .html(`Year: ${d.Year}<br/>GDP per capita: $${(+d['GDP per capita']).toFixed(2)}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mousemove", function(event) {
+            tooltip
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function() {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .style("opacity", 0)
+                .attr("r", 3);
+            
+            tooltip
+                .style("opacity", 0);
+        });
 
     // Add titles
     svg
