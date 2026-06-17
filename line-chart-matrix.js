@@ -41,7 +41,7 @@ d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( funct
     svg
     .append("g")
     .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).ticks(3));
+    .call(d3.axisBottom(x).ticks(3).tickFormat(d3.format("d")));
 
     //Add Y axis
     const y = d3.scaleLinear()
@@ -103,7 +103,7 @@ d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( funct
             
             tooltip
                 .style("opacity", 1)
-                .html(`Year: ${d.Year}<br/>GDP per capita: $${(+d['GDP per capita']).toFixed(2)}`)
+                .html(`Year: ${d.Year.toString().replace(/,/g,'')}<br/>GDP per capita: $${(+d['GDP per capita']).toFixed(2)}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })

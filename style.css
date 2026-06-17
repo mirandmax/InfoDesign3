@@ -25,6 +25,8 @@ body {
   background: var(--bg);
   color: var(--ink);
   line-height: 1.6;
+  appearance: none;
+  margin: 0;
 }
 
 .masthead {
@@ -156,16 +158,15 @@ body {
   margin-right: auto;
 }
 
-.tooltip {
-  position: absolute;
-  background: var(--cream);
-  color: var(--ink);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 0.85rem;
+#tooltip {
+  position: absolute;   
   pointer-events: none; 
-  opacity: 0; 
-  transition: opacity 0.2s ease-in-out; 
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 .year-slider {

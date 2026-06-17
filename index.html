@@ -1,112 +1,119 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tax & Inequality - A Global Overview</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-  </head>
 
-  <header class="masthead">
-    <div class="masthead-inner">
-      <span class="kicker">Data Analysis - Global Economics</span>
-      <h1 class="headline">The Unequal World</h1>
-      <p class="deck">How income inequality and tax revenues have evolved across continents since 1985 and what the Gini coefficient tells us about where we are today.</p>
-      <div class="byline-row">
-        <span class="byline">By Diego Grünberger, Max Mirandola and Elias Puntaier</span>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tax & Inequality - A Global Overview</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
 
+<header class="masthead">
+  <div class="masthead-inner">
+    <span class="kicker">Data Analysis - Global Economics</span>
+    <h1 class="headline">The Unequal World</h1>
+    <p class="deck">How income inequality and tax revenues have evolved across continents since 1985 and what the Gini
+      coefficient tells us about where we are today.</p>
+    <div class="byline-row">
+      <span class="byline">By Diego Grünberger, Max Mirandola and Elias Puntaier</span>
+
+    </div>
+  </div>
+</header>
+
+<body>
+  <div class="visualization-section" id="section1">
+    <div class="section-text">
+      <h2 class="section-title">Inequality across continents</h2>
+      <p class="section-body">
+        The Gini coefficient measures the distribution of income within a
+        country, where 0 represents perfect equality and 1 perfect inequality.
+        Aggregated by continent, the radar chart below reveals the structural
+        differences in how wealth is spread — differences that have proven
+        remarkably persistent over decades.
+      </p>
+      <p class="section-body">
+        Africa consistently records the highest levels of income inequality,
+        while Europe's social welfare systems have kept inequality
+        comparatively low. Asia and the Americas occupy a broad middle ground,
+        though with considerable variation between countries.
+      </p>
+      <div class="annotation-box">
+        <strong>How to read this chart:</strong> Each axis represents a
+        continent. Values further from the center indicate higher inequality
+        (higher Gini). The shaded area shows the mean Gini for the most recent
+        available year.
       </div>
     </div>
-  </header>
-
-  <body>
-    <div class="visualization-section" id="section1">
-      <div class="section-text">
-        <h2 class="section-title">Inequality across continents</h2>
-        <p class="section-body">
-          The Gini coefficient measures the distribution of income within a
-          country, where 0 represents perfect equality and 1 perfect inequality.
-          Aggregated by continent, the radar chart below reveals the structural
-          differences in how wealth is spread — differences that have proven
-          remarkably persistent over decades.
-        </p>
-        <p class="section-body">
-          Africa consistently records the highest levels of income inequality,
-          while Europe's social welfare systems have kept inequality
-          comparatively low. Asia and the Americas occupy a broad middle ground,
-          though with considerable variation between countries.
-        </p>
-        <div class="annotation-box">
-          <strong>How to read this chart:</strong> Each axis represents a
-          continent. Values further from the center indicate higher inequality
-          (higher Gini). The shaded area shows the mean Gini for the most recent
-          available year.
+    <div>
+      <div id="choropleth-map"></div>
+      <div id="tooltip">
+        <div class="tooltip-row">
+          <span id="tooltipCountryText" class="tooltip-value"></span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">Gini: </span>
+          <span id="tooltipGiniText" class="tooltip-value"></span>
         </div>
       </div>
-      <div>
-        <div id="choropleth-map"></div>
-        <div id="tooltip">
-          <p class ="tooltipCountry"><b>Country:</b> 
-            <a id="tooltipCountryText"></a>
-          </p>
-          <p class ="tooltipGini"><b>Gini Coefficient:</b>
-            <a id="tooltipGiniText"></a>
-          </p>
-        </div>
-      </div>
-
-    </div>
-    <div class="section-divider"></div>
-
-    <div class="visualization-section" id="section2">
-      <div id="bubble-plot"></div>
-      <div class="slider-wrapper">
-        <div id="slider-tooltip" class="slider-tooltip">2020</div>
-        <div class="slider-track-row">
-          <span id="slider-min-year" class="slider-bound slider-bound--min">1975</span>
-          <input type="range" class="year-slider" id="year-slider" min="1975" max="2020" value="2020" step="1" />
-          <span id="slider-max-year" class="slider-bound slider-bound--max">2020</span>
-        </div>
-      </div>
-      <div class="bubble-plot-copy">
-        <h3 class="bubble-plot-title">What the bubble plot shows</h3>
-        <p class="bubble-plot-text">
-          Each bubble represents one country for the selected year. The x-axis
-          shows income inequality, the y-axis shows tax revenue as a share of
-          GDP, and bubble size reflects GDP per capita.
-        </p>
-        <p class="bubble-plot-text">
-          Use the slider to move through time and compare how the relationship
-          between inequality and taxation changes across continents.
-        </p>
-      </div>
-      <div class="bubble-plot-note">
-        The chart highlights that countries with similar inequality levels can
-        still differ strongly in tax revenue and wealth. The chart highlights that countries with similar inequality levels can
-        still differ strongly in tax revenue and wealth. The chart highlights that countries with similar inequality levels can
-        still differ strongly in tax revenue and wealth. The chart highlights that countries with similar inequality levels can
-        still differ strongly in tax revenue and wealth.
-      </div>
     </div>
 
-    <div class="section-divider"></div>
+  </div>
+  <div class="section-divider"></div>
 
-    <div class="visualization-section" id="section3">
-      <div id="line-chart-matrix"></div>
+  <div class="visualization-section" id="section2">
+    <div id="bubble-plot"></div>
+    <div class="slider-wrapper">
+      <div id="slider-tooltip" class="slider-tooltip">2020</div>
+      <div class="slider-track-row">
+        <span id="slider-min-year" class="slider-bound slider-bound--min">1975</span>
+        <input type="range" class="year-slider" id="year-slider" min="1975" max="2020" value="2020" step="1" />
+        <span id="slider-max-year" class="slider-bound slider-bound--max">2020</span>
+      </div>
     </div>
-
-    <div class="section-divider"></div>
-
-    <div class="visualization-section" id="section4">
-      <div id="slope-chart"></div>
+    <div class="bubble-plot-copy">
+      <h3 class="bubble-plot-title">What the bubble plot shows</h3>
+      <p class="bubble-plot-text">
+        Each bubble represents one country for the selected year. The x-axis
+        shows income inequality, the y-axis shows tax revenue as a share of
+        GDP, and bubble size reflects GDP per capita.
+      </p>
+      <p class="bubble-plot-text">
+        Use the slider to move through time and compare how the relationship
+        between inequality and taxation changes across continents.
+      </p>
     </div>
-  </body>
+    <div class="bubble-plot-note">
+      The chart highlights that countries with similar inequality levels can
+      still differ strongly in tax revenue and wealth. The chart highlights that countries with similar inequality
+      levels can
+      still differ strongly in tax revenue and wealth. The chart highlights that countries with similar inequality
+      levels can
+      still differ strongly in tax revenue and wealth. The chart highlights that countries with similar inequality
+      levels can
+      still differ strongly in tax revenue and wealth.
+    </div>
+  </div>
 
-  <script src="data.js"></script>
-  <script src="choropleth-map.js"></script>
-  <script src="bubble-plot.js"></script>
-  <script src="line-chart-matrix.js"></script>
-  <script src="slope-chart.js"></script>
-  <script src="main.js"></script>
+  <div class="section-divider"></div>
+
+  <div class="visualization-section" id="section3">
+    <div id="line-chart-matrix"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="visualization-section" id="section4">
+    <div id="slope-chart"></div>
+  </div>
+</body>
+
+<script src="data.js"></script>
+<script src="choropleth-map.js"></script>
+<script src="bubble-plot.js"></script>
+<script src="line-chart-matrix.js"></script>
+<script src="slope-chart.js"></script>
+<script src="main.js"></script>
+
 </html>
