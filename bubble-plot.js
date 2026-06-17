@@ -67,7 +67,7 @@ function drawBubblePlot(data) {
     .attr("text-anchor", "start")
     .attr("x", -10)
     .attr("y", -10)
-    .text("Tax Revenue");
+    .text("Tax Revenue(% of GDP)");
 
   const bubbleLayer = chartLayer.append("g").attr("class", "bubble-layer");
 
