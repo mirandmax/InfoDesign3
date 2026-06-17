@@ -8,12 +8,14 @@ function mouseOver(event, country) {
     .style("opacity", 1)
     .style("stroke", "black")
     .style("stroke-width", 2);
-  
+
   document.getElementById("tooltip").style.visibility = "visible";
   document.getElementById("tooltipCountryText").textContent =
     country.properties.name;
   document.getElementById("tooltipGiniText").textContent =
     country.total < 0.01 ? "No data" : country.total.toFixed(2);
+
+  mouseMove(event); // direkt einmal positionieren
 }
 
 function mouseLeave(d) {
@@ -25,7 +27,18 @@ function mouseLeave(d) {
     .style("stroke-width", 1);
 
   document.getElementById("tooltip").style.visibility = "hidden";
+}
 
+function mouseMove(event) {
+  const tooltip = document.getElementById("tooltip");
+  const offsetX = 15; // Abstand nach rechts
+  const offsetY = 15; // Abstand nach oben
+
+  // Höhe des Tooltips, um es "über" der Maus zu platzieren
+  const ttHeight = tooltip.offsetHeight;
+
+  tooltip.style.left = event.pageX + offsetX + "px";
+  tooltip.style.top = event.pageY - ttHeight - offsetY + "px";
 }
 
 function drawChoroplethMap(ChoroData) {
@@ -76,13 +89,23 @@ function drawChoroplethMap(ChoroData) {
         .attr("d", d3.geoPath().projection(projection))
         // set the color of each country
         .attr("fill", function (d) {
-          d.total =
-            ChoroData.filter((v) => v.country === d.properties.name)[0]?.gini ||
-            0;
+          
+          const match = ChoroData.filter(
+            (v) => v.code === d.id,
+          )[0];
+
+          // kein Eintrag gefunden ODER kein gültiger Wert -> No Data
+          if (!match || match.gini == null) {
+            d.total = -1; // Marker für "keine Daten"
+            return "#e0e0e0"; // graue Fläche
+          }
+
+          d.total = match.gini;
           return colorScale(d.total);
         })
         .on("mouseover", mouseOver)
         .on("mouseleave", mouseLeave)
+        .on("mousemove", mouseMove);
     },
   );
 }
