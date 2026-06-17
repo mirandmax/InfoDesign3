@@ -51,36 +51,37 @@ Promise.all([
 
     // Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
     const svg = d3.select("#line-chart-matrix")
-    .selectAll("uniqueChart")
-    .data(sumstat)
-    .enter()
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-            `translate(${margin.left},${margin.top})`);
+        .selectAll("uniqueChart")
+        .data(sumstat)
+        .enter()
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform",`translate(${margin.left},${margin.top})`);
 
     // Add X axis --> it is a date format
     const x = d3.scaleLinear()
-    .domain(d3.extent(data, function(d) { return d.Year; }))
-    .range([ 0, width ]);
-    svg
-    .append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).ticks(3).tickFormat(d3.format("d")));
+        .domain(d3.extent(data, function(d) { return d.Year; }))
+        .range([ 0, width ]);
+    
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x).ticks(3).tickFormat(d3.format("d")));
 
     //Add Y axis
     const y = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return +d['GDP per capita']; })])
-    .range([ height, 0 ]);
+        .domain([0, d3.max(data, function(d) { return +d['GDP per capita']; })])
+        .range([ height, 0 ]);
+    
     svg.append("g")
-    .call(d3.axisLeft(y).ticks(5));
+        .call(d3.axisLeft(y).ticks(5));
 
     //Add second Y axis for Gini coefficient
     const y2 = d3.scaleLinear()
         .domain([0, 1]) // Gini coefficient ranges from 0 to 1
         .range([ height, 0 ]);
+
     svg.append("g")
         .attr("transform", `translate(${width}, 0)`)
         .call(d3.axisRight(y2).ticks(5));
@@ -198,8 +199,7 @@ Promise.all([
     // -------------------------------------
 
     // Draw the line
-    svg
-    .append("path")
+    svg.append("path")
         .attr("fill", "none")
         .attr("stroke", function(d){ return color(d[0]) })
         .attr("stroke-width", 1.9)
@@ -216,54 +216,52 @@ Promise.all([
     // -------------------------------------
 
     // Add circles for hover interaction
-    svg
-    .selectAll("dot")
-    .data(function(d) { return d[1]; })
-    .enter()
-    .append("circle")
-        .attr("cx", function(d) { return x(d.Year); })
-        .attr("cy", function(d) { return y(+d['GDP per capita']); })
-        .attr("r", 1)
-        .attr("fill", function(d) { return color(d.Entity); })
-        .attr("stroke", function(d) { return "black"; })
-        .attr("stroke-width", 1)
-        .style("opacity", 0)
-        .on("mouseover", function(event, d) {
-            d3.select(this)
-                .transition()
-                .duration(200)
-                .style("opacity", 1)
-                .attr("r", 3);
-            
-            tooltip
-                .style("opacity", 1)
-                .html(`Year: ${d.Year.toString().replace(/,/g,'')}<br/>GDP per capita: $${(+d['GDP per capita']).toFixed(2)}`)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 28) + "px");
-        })
-        .on("mousemove", function(event) {
-            tooltip
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 28) + "px");
-        })
-        .on("mouseout", function() {
-            d3.select(this)
-                .transition()
-                .duration(200)
-                .style("opacity", 0)
-                .attr("r", 3);
-            
-            tooltip
-                .style("opacity", 0);
-        });
+    svg.selectAll("dot")
+        .data(function(d) { return d[1]; })
+        .enter()
+        .append("circle")
+            .attr("cx", function(d) { return x(d.Year); })
+            .attr("cy", function(d) { return y(+d['GDP per capita']); })
+            .attr("r", 1)
+            .attr("fill", function(d) { return color(d.Entity); })
+            .attr("stroke", function(d) { return "black"; })
+            .attr("stroke-width", 1)
+            .style("opacity", 0)
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 1)
+                    .attr("r", 3);
+                
+                tooltip
+                    .style("opacity", 1)
+                    .html(`Year: ${d.Year.toString().replace(/,/g,'')}<br/>GDP per capita: $${(+d['GDP per capita']).toFixed(2)}`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mousemove", function(event) {
+                tooltip
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0)
+                    .attr("r", 3);
+                
+                tooltip
+                    .style("opacity", 0);
+            });
 
     // Add titles
-    svg
-    .append("text")
-    .attr("text-anchor", "start")
-    .attr("y", -5)
-    .attr("x", 0)
-    .text(function(d){ return(d[0])})
-    .style("fill", function(d){ return color(d[0]) })
+    svg.append("text")
+        .attr("text-anchor", "start")
+        .attr("y", -5)
+        .attr("x", 0)
+        .text(function(d){ return(d[0])})
+        .style("fill", function(d){ return color(d[0]) })
 
 })
