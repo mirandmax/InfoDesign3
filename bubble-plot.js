@@ -26,6 +26,11 @@ function drawBubblePlot(data) {
       ? BUBBLE_OPACITY_ACTIVE 
       : BUBBLE_OPACITY_INACTIVE;
 
+  const calculateBubblePointerEvents = (d, activeContinents) =>
+    activeContinents.size === 0 || activeContinents.has(d.continent)
+      ? "all"
+      : "none";
+
   const cleanData = data.filter(d => d.gini !== null && d.taxPct !== null && d.gdpPerCapita !== null);
   const years = cleanData.map(d => +d.year);
   const minYear = d3.min(years);
@@ -62,7 +67,7 @@ function drawBubblePlot(data) {
     .attr("text-anchor", "start")
     .attr("x", -10)
     .attr("y", -10)
-    .text("Tax Revenue");
+    .text("Tax Revenue(% of GDP)");
 
   const bubbleLayer = chartLayer.append("g").attr("class", "bubble-layer");
 
@@ -84,7 +89,18 @@ function drawBubblePlot(data) {
     .style("pointer-events", "none")
     .attr("class", "tooltip");
 
+  const isTooltipAllowed = function (d, activeContinents = getActiveContinents()) {
+    return activeContinents.size === 0 || activeContinents.has(d.continent);
+  };
+
+  let tooltipCountry = null;
+
   const showTooltip = function (event, d) {
+    if (!isTooltipAllowed(d)) {
+      return;
+    }
+
+    tooltipCountry = d;
     tooltip
       .transition()
       .duration(200)
@@ -95,11 +111,16 @@ function drawBubblePlot(data) {
       .style("top", (event.pageY + 10) + "px")
   }
   const moveTooltip = function (event, d) {
+    if (!isTooltipAllowed(d)) {
+      return;
+    }
+
     tooltip
       .style("left", (event.pageX + 10) + "px")
       .style("top", (event.pageY + 10) + "px")
   }
   const hideTooltip = function (event, d) {
+    tooltipCountry = null;
     tooltip
       .style("opacity", 0)
   }
@@ -125,6 +146,12 @@ function drawBubblePlot(data) {
 
     d3.selectAll(".bubbles")
       .style("opacity", d => calculateBubbleOpacity(d, activeContinents));
+    d3.selectAll(".bubbles")
+      .style("pointer-events", d => calculateBubblePointerEvents(d, activeContinents));
+
+    if (tooltipCountry && !isTooltipAllowed(tooltipCountry, activeContinents)) {
+      hideTooltip();
+    }
 
     if (legendDots && legendLabels) {
       legendDots.classed("is-active", d => selectedContinents.has(d));
@@ -173,6 +200,7 @@ function drawBubblePlot(data) {
       .attr("r", d => z(d.gdpPerCapita))
       .style("fill", d => myColor(d.continent))
       .style("opacity", d => calculateBubbleOpacity(d, getActiveContinents()))
+      .style("pointer-events", d => calculateBubblePointerEvents(d, getActiveContinents()))
       .on("mouseover", showTooltip)
       .on("mousemove", moveTooltip)
       .on("mouseleave", hideTooltip);
@@ -183,6 +211,7 @@ function drawBubblePlot(data) {
       .transition()
       .duration(TRANSITION_DURATION)
       .style("opacity", d => calculateBubbleOpacity(d, getActiveContinents()))
+      .style("pointer-events", d => calculateBubblePointerEvents(d, getActiveContinents()))
       .attr("cx", d => x(d.gini))
       .attr("cy", d => y(d.taxPct))
       .attr("r", d => z(d.gdpPerCapita))
