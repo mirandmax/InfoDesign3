@@ -3,14 +3,41 @@ var margin = {top: 30, right: 0, bottom: 30, left: 50},
     width = 210 - margin.left - margin.right,
     height = 210 - margin.top - margin.bottom;
 
-//Read the data
-d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( function(data) {
+//Read data
+Promise.all([
+    d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv'),
+    d3.csv('data/tax-revenues-vs-income-inequality/tax-revenues-vs-income-inequality.csv')
+]).then(function([gdpData, giniData]) {
 
     // TODO: decide which countries to keep
     const keepCountry = ['Austria', 'Germany', 'Italy', 'Australia', 'United States', 'China', 'India', 'Brazil', 'South Africa'] 
+    
+    // Parse and clean GDP data
+    gdpData.forEach(function(d) {
+        if (d.Year !== undefined) d.Year = +d.Year.toString().replace(/,/g, '');
+        if (d['GDP per capita'] !== undefined) {
+            const gdp = d['GDP per capita'].toString().replace(/,/g, '');
+            d['GDP per capita'] = gdp === '' ? NaN : +gdp;
+        }
+    });
+
+    // Parse and clean Gini data and build lookup map by Entity+Year
+    const giniMap = new Map();
+    giniData.forEach(function(d) {
+        if (d.Year !== undefined) d.Year = +d.Year.toString().replace(/,/g, '');
+        const g = d['Gini coefficient'] !== undefined ? d['Gini coefficient'].toString().replace(/,/g, '') : '';
+        const gval = g === '' ? NaN : +g;
+        giniMap.set(d.Entity + '||' + d.Year, gval);
+    });
+
+    // Merge Gini into GDP rows (match on Entity + Year)
+    gdpData.forEach(function(d) {
+        const key = d.Entity + '||' + d.Year;
+        d['Gini coefficient'] = giniMap.has(key) ? giniMap.get(key) : NaN;
+    });
 
     // Keep only some rows 
-    const filteredData = data.filter(function(d) {
+    const filteredData = gdpData.filter(function(d) {
         return keepCountry.includes(d.Entity);
     });
 
@@ -51,9 +78,7 @@ d3.csv('data/gdp-per-capita-worldbank/gdp-per-capita-worldbank.csv').then( funct
     .call(d3.axisLeft(y).ticks(5));
 
     // color palette
-    const color = d3.scaleOrdinal()
-    //.domain(allKeys)
-    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+    const color = d3.scaleOrdinal().range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#a65628','#f781bf','#999999', '#964675'])
 
     // Create tooltip
     const tooltip = d3.select("body").append("div")
