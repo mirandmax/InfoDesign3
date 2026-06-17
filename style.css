@@ -12,6 +12,10 @@
 
   --max-w: 1100px;
   --col-text: 420px;
+
+  --bubble-svg-w: 900px;
+  --bubble-axis-w: 700px;
+  --bubble-left-margin: 50px;
 }
 
 html { font-size: 18px; scroll-behavior: smooth; }
@@ -150,4 +154,179 @@ body {
   max-width: 620px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.tooltip {
+  position: absolute;
+  background: var(--cream);
+  color: var(--ink);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  pointer-events: none; 
+  opacity: 0; 
+  transition: opacity 0.2s ease-in-out; 
+}
+
+.year-slider {
+  width: 900px;
+  margin-top: 20px;
+  appearance: none;
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+#section2 {
+  display: grid;
+  grid-template-columns: minmax(0, var(--bubble-svg-w)) minmax(280px, 1fr);
+  grid-template-areas:
+    "plot copy"
+    "slider copy"
+    "note note";
+  column-gap: 36px;
+  justify-content: center;
+  align-items: start;
+}
+
+#bubble-plot {
+  grid-area: plot;
+  width: var(--bubble-svg-w);
+  justify-self: start;
+}
+
+#section2 .year-slider {
+  width: var(--bubble-axis-w);
+  margin-top: 12px;
+}
+
+.slider-wrapper {
+  grid-area: slider;
+  position: relative;
+  width: var(--bubble-axis-w);
+  margin: 12px 0 0 50px;
+  justify-self: start;
+}
+
+.slider-track-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.slider-bound {
+  min-width: 42px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.slider-bound--min {
+  text-align: left;
+}
+
+.slider-bound--max {
+  text-align: right;
+}
+
+.slider-track-row input[type="range"] {
+  width: 100%;
+}
+
+.bubble-plot-copy {
+  grid-area: copy;
+  max-width: 420px;
+  padding-top: 12px;
+  margin-left: 12px;
+}
+
+.bubble-plot-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.bubble-plot-text,
+.bubble-plot-note {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  line-height: 1.75;
+}
+
+.bubble-plot-text {
+  margin: 0 0 12px;
+}
+
+.bubble-plot-note {
+  grid-area: note;
+  width: 100%;
+  margin-top: 10px;
+  margin-left: 0;
+}
+
+.slider-tooltip {
+  position: absolute;
+  top: -20px; /* Platziert das Label über dem Slider */
+  left: 0;    /* Wird per JS dynamisch überschrieben */
+  transform: translateX(-50%); /* Zentriert das Label über dem Berechnungs-Punkt */
+  background-color: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  font-size: 12px;
+  pointer-events: none; /* Verhindert, dass das Label Mausklicks blockiert */
+  white-space: nowrap;
+}
+
+
+
+.x-axis-label, .y-axis-label {
+  font-size: 16px;
+  font-family: var(--font-sans);
+  fill: var(--ink-light);
+}
+
+.x-axis .tick text,
+.y-axis .tick text {
+  font-size: 14px;
+}
+
+.legend-dot,
+.legend-label {
+  cursor: pointer;
+}
+
+.legend-dot.is-active {
+  stroke: var(--ink);
+  stroke-width: 2px;
+}
+
+.legend-label.is-active {
+  font-weight: 700;
+  fill: var(--ink);
+}
+
+@media (max-width: 1120px) {
+  #section2 {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "plot"
+      "slider"
+      "copy"
+      "note";
+  }
+
+  #bubble-plot,
+  .slider-wrapper,
+  .bubble-plot-note,
+  .bubble-plot-copy {
+    max-width: 100%;
+  }
 }
