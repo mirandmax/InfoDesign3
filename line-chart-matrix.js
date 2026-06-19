@@ -83,7 +83,7 @@ Promise.all([
 
     //Add second Y axis for Gini coefficient
     const y2 = d3.scaleLinear()
-        .domain([0, 0.6]) // Gini coefficient ranges from 0 to 0.6
+        .domain([0.25, 0.6]) // Gini coefficient ranges from 0 to 0.6
         .range([ height, 0 ]);
 
     svg.append("g")
