@@ -13,9 +13,9 @@
   --max-w: 1100px;
   --col-text: 420px;
 
-  --bubble-svg-w: 900px;
+  --bubble-svg-w: 800px;
   --bubble-axis-w: 700px;
-  --bubble-left-margin: 50px;
+  --bubble-left-margin: 30px;
 }
 
 html {
@@ -168,6 +168,8 @@ body {
   margin-right: auto;
 }
 
+
+
 #tooltip {
   position: absolute;
   pointer-events: none;
@@ -192,7 +194,7 @@ body {
 }
 
 .year-slider {
-  width: 900px;
+  width: 800px;
   margin-top: 20px;
   appearance: none;
   height: 6px;
@@ -202,20 +204,24 @@ body {
   cursor: pointer;
 }
 
-#section2 {
+.visualization-section {
   display: grid;
-  grid-template-columns: minmax(0, var(--bubble-svg-w)) minmax(280px, 1fr);
-  grid-template-areas:
-    "plot copy"
-    "slider copy"
-    "note note";
-  column-gap: 36px;
-  justify-content: center;
-  align-items: start;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+@media (min-width: 1500px) {
+  .visualization-section {
+    grid-template-columns: 1fr 1fr; 
+  }
+
+  .bubble-plot-note {
+    /* Sagt der 3. Box, dass sie von Linie 1 bis Linie 3 spannen soll (volle Breite) */
+    grid-column: 1 / 3;
+  }
 }
 
 #bubble-plot {
-  grid-area: plot;
   width: var(--bubble-svg-w);
   justify-self: start;
 }
@@ -226,7 +232,6 @@ body {
 }
 
 .slider-wrapper {
-  grid-area: slider;
   position: relative;
   width: var(--bubble-axis-w);
   margin: 12px 0 0 50px;
@@ -260,7 +265,6 @@ body {
 }
 
 .bubble-plot-copy {
-  grid-area: copy;
   max-width: 420px;
   padding-top: 12px;
   margin-left: 12px;
@@ -296,7 +300,6 @@ body {
 }
 
 .bubble-plot-note {
-  grid-area: note;
   width: 100%;
   margin-top: 10px;
   margin-left: 0;
@@ -350,23 +353,7 @@ body {
   fill: var(--ink);
 }
 
-@media (max-width: 1120px) {
-  #section2 {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "plot"
-      "slider"
-      "copy"
-      "note";
-  }
 
-  #bubble-plot,
-  .slider-wrapper,
-  .bubble-plot-note,
-  .bubble-plot-copy {
-    max-width: 100%;
-  }
-}
 
 .footer{
   background-color: var(--cream);
