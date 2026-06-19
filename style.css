@@ -130,7 +130,6 @@ body {
 }
 
 .section-text--centered {
-  text-align: center;
   justify-self: center;
   max-width: 760px;
 }
