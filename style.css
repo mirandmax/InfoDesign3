@@ -88,6 +88,10 @@ body {
   padding-top: 16px;
 }
 
+.byline-link{
+  color: black;
+}
+
 .bubbles {
   stroke-width: 1px;
   stroke: black;
@@ -362,4 +366,15 @@ body {
   .bubble-plot-copy {
     max-width: 100%;
   }
+}
+
+.footer{
+  background-color: var(--cream);
+  text-align: center;
+    font-family: var(--font-sans);
+  color: var(--ink);
+  line-height: 1.6;
+  appearance: none;
+  margin: 0;
+  padding: 24px;
 }
