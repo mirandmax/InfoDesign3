@@ -107,7 +107,9 @@ body {
 
 
 .visualization-section {
-  padding: 64px 24px;
+  padding: 25px;
+  padding-left: 15%;
+  padding-right: 15%;
 }
 
 .visualization-section:nth-child(odd) {
