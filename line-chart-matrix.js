@@ -10,7 +10,7 @@ Promise.all([
 ]).then(function([gdpData, giniData]) {
 
     // TODO: decide which countries to keep
-    const keepCountry = ['Austria', 'Germany', 'Italy', 'Australia', 'United States', 'China', 'India', 'Brazil', 'South Africa'] 
+    const keepCountry = ['Sweden', 'Germany', 'Poland', 'Brazil', 'Colombia', 'Mexico', 'Indonesia', 'Turkey', 'Zambia']; 
     
     // Parse and clean GDP data
     gdpData.forEach(function(d) {
@@ -46,13 +46,17 @@ Promise.all([
     // group the data: I want to draw one line per group
     const sumstat = d3.group(data, d => d.Entity) // nest function allows to group the calculation per level of a factor
 
-    // What is the list of groups?
-    allKeys = new Set(data.map(d=>d.Entity))
+    // Preserve the country order from keepCountry
+    const orderedSumstat = keepCountry
+        .filter(country => sumstat.has(country))
+        .map(country => [country, sumstat.get(country)]);
+
+    allKeys = new Set(orderedSumstat.map(d => d[0]));
 
     // Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
     const svg = d3.select("#line-chart-matrix")
         .selectAll("uniqueChart")
-        .data(sumstat)
+        .data(orderedSumstat)
         .enter()
         .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -79,7 +83,7 @@ Promise.all([
 
     //Add second Y axis for Gini coefficient
     const y2 = d3.scaleLinear()
-        .domain([0, 1]) // Gini coefficient ranges from 0 to 1
+        .domain([0, 0.6]) // Gini coefficient ranges from 0 to 0.6
         .range([ height, 0 ]);
 
     svg.append("g")
@@ -145,16 +149,16 @@ Promise.all([
             .attr("viewBox", "0 -5 10 10")
             .attr("refX", 10)
             .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
+            .attr("markerWidth", 20)
+            .attr("markerHeight", 20)
             .attr("orient", "auto")
         .append("path")
             .attr("d", "M0,-5L10,0L0,5")
             .attr("fill", color);
     }
 
-    createMarker("bg-arrow-red", "#e41a1c80");
-    createMarker("bg-arrow-green", "#4daf4a80");
+    createMarker("bg-arrow-red", "#e41a1c40");
+    createMarker("bg-arrow-green", "#4daf4a40");
 
 
     // 2. BACKGROUND LAYER: Draw arrow colored by Gini trend (red=up, green=down)
@@ -180,7 +184,7 @@ Promise.all([
             const endEntry = d[1].find(v => v.Year === endYear);
             const startGini = startEntry && !isNaN(+startEntry['Gini coefficient']) ? +startEntry['Gini coefficient'] : (d3.mean(d[1], v => +v['Gini coefficient']) || 0);
             const endGini = endEntry && !isNaN(+endEntry['Gini coefficient']) ? +endEntry['Gini coefficient'] : (d3.mean(d[1], v => +v['Gini coefficient']) || 0);
-            return endGini > startGini ? "#e41a1c" : "#4daf4a"; // red if increasing, green if decreasing
+            return endGini > startGini ? "#e41a1c40" : "#4daf4a40"; // red if increasing, green if decreasing
         })
         .attr("stroke-width", 1.5)
         .attr("marker-end", function(d) {
