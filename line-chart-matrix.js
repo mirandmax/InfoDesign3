@@ -10,7 +10,7 @@ Promise.all([
 ]).then(function([gdpData, giniData]) {
 
     // TODO: decide which countries to keep
-    const keepCountry = ['Austria', 'Germany', 'Italy', 'Australia', 'United States', 'China', 'India', 'Brazil', 'South Africa'] 
+    const keepCountry = ['Sweden', 'Germany', 'Poland', 'Brazil', 'Colombia', 'Mexico', 'Indonesia', 'Turkey', 'Zambia']; 
     
     // Parse and clean GDP data
     gdpData.forEach(function(d) {
@@ -46,13 +46,17 @@ Promise.all([
     // group the data: I want to draw one line per group
     const sumstat = d3.group(data, d => d.Entity) // nest function allows to group the calculation per level of a factor
 
-    // What is the list of groups?
-    allKeys = new Set(data.map(d=>d.Entity))
+    // Preserve the country order from keepCountry
+    const orderedSumstat = keepCountry
+        .filter(country => sumstat.has(country))
+        .map(country => [country, sumstat.get(country)]);
+
+    allKeys = new Set(orderedSumstat.map(d => d[0]));
 
     // Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
     const svg = d3.select("#line-chart-matrix")
         .selectAll("uniqueChart")
-        .data(sumstat)
+        .data(orderedSumstat)
         .enter()
         .append("svg")
             .attr("width", width + margin.left + margin.right)
