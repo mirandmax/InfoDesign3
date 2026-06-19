@@ -83,7 +83,7 @@ Promise.all([
 
     //Add second Y axis for Gini coefficient
     const y2 = d3.scaleLinear()
-        .domain([0, 1]) // Gini coefficient ranges from 0 to 1
+        .domain([0, 0.6]) // Gini coefficient ranges from 0 to 0.6
         .range([ height, 0 ]);
 
     svg.append("g")
@@ -149,16 +149,16 @@ Promise.all([
             .attr("viewBox", "0 -5 10 10")
             .attr("refX", 10)
             .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
+            .attr("markerWidth", 20)
+            .attr("markerHeight", 20)
             .attr("orient", "auto")
         .append("path")
             .attr("d", "M0,-5L10,0L0,5")
             .attr("fill", color);
     }
 
-    createMarker("bg-arrow-red", "#e41a1c80");
-    createMarker("bg-arrow-green", "#4daf4a80");
+    createMarker("bg-arrow-red", "#e41a1c40");
+    createMarker("bg-arrow-green", "#4daf4a40");
 
 
     // 2. BACKGROUND LAYER: Draw arrow colored by Gini trend (red=up, green=down)
@@ -184,7 +184,7 @@ Promise.all([
             const endEntry = d[1].find(v => v.Year === endYear);
             const startGini = startEntry && !isNaN(+startEntry['Gini coefficient']) ? +startEntry['Gini coefficient'] : (d3.mean(d[1], v => +v['Gini coefficient']) || 0);
             const endGini = endEntry && !isNaN(+endEntry['Gini coefficient']) ? +endEntry['Gini coefficient'] : (d3.mean(d[1], v => +v['Gini coefficient']) || 0);
-            return endGini > startGini ? "#e41a1c" : "#4daf4a"; // red if increasing, green if decreasing
+            return endGini > startGini ? "#e41a1c40" : "#4daf4a40"; // red if increasing, green if decreasing
         })
         .attr("stroke-width", 1.5)
         .attr("marker-end", function(d) {
