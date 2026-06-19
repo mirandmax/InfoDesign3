@@ -1,11 +1,12 @@
 // set the dimensions and margins of the graph
-var marginBubble = { top: 30, right: 150, bottom: 40, left: 50 },
-  widthBubble = 900 - marginBubble.left - marginBubble.right,
+var marginBubble = { top: 30, right: 50, bottom: 40, left: 30 },
+  widthBubble = 800 - marginBubble.left - marginBubble.right,
   heightBubble = 420 - marginBubble.top - marginBubble.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("#bubble-plot")
   .append("svg")
+  .lower()
   .attr("width", widthBubble + marginBubble.left + marginBubble.right)
   .attr("height", heightBubble + marginBubble.top + marginBubble.bottom)
   .append("g")
@@ -34,7 +35,7 @@ function drawBubblePlot(data) {
   const cleanData = data.filter(d => d.gini !== null && d.taxPct !== null && d.gdpPerCapita !== null);
   const years = cleanData.map(d => +d.year);
   const minYear = d3.min(years);
-  const maxYear = d3.max(years);
+  const maxYear = 2023
   const slider = d3.select("#year-slider");
   const sliderTooltip = d3.select("#slider-tooltip");
   const sliderMinYear = d3.select("#slider-min-year");
