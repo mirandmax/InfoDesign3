@@ -136,6 +136,7 @@ body {
 #line-chart-matrix {
   display: grid;
   grid-template-columns: repeat(3, max-content);
+  grid-template-rows: repeat(3, max-content);  
   gap: 10px;
 
   justify-content: center;
