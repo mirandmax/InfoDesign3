@@ -131,6 +131,12 @@ body {
 
 .section-text--centered {
   text-align: center;
+  justify-self: center;
+  max-width: 760px;
+}
+
+#section4 {
+  justify-items: center;
 }
 
 #line-chart-matrix {
@@ -214,6 +220,10 @@ body {
 @media (min-width: 1500px) {
   .visualization-section {
     grid-template-columns: 1fr 1fr; 
+  }
+
+  #section4 {
+    grid-template-columns: 1fr;
   }
 
   .bubble-plot-note {
